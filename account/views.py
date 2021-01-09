@@ -103,18 +103,18 @@ def get_time_str(orgtime):
 
 
 def index(request):
-    if not request.user.is_authenticated:
-        return redirect('/login')
-    else:        
-        return redirect('/dashboard')
+    # if not request.user.is_authenticated:
+    #     return redirect('/login')
+    # else:        
+    return redirect('/dashboard')
         
 def dashboard(request):
-    if not request.user.is_authenticated:
-        return redirect('/login')
+    # if not request.user.is_authenticated:
+    #     return redirect('/login')
     user = request.user 
     
     
-    return render(request,'data/dashboard.html',{}) 
+    return render(request,'data/sample.html',{}) 
 # -------------------------------------------------------
 def logout(request):
     if request.method == 'POST':
