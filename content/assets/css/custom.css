@@ -325,3 +325,7 @@ table tr td{
 .sel_nav_item:hover{
     cursor: pointer;
 }
+.canvasjs-chart-canvas
+{
+    width: 100%!important;
+}
