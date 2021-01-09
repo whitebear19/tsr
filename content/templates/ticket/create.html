@@ -1,0 +1,144 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="main-section">
+        <div class="container"> 
+            <a href="/dashboard"><i class="far fa-hand-point-left"></i> Back</a>
+            <form action="" id="form_ticket" method="post">
+                {% csrf_token %}
+                <div class="body_ticket" style="width: 500px; margin: auto;"> 
+                    <div class="wrapper_item">
+                        <div class="col-md-12 mb-3">
+                            <div class="header_ticket">
+                                {% if ticket %}
+                                    <h3>Edit License</h3>
+                                {% else %}
+                                    <h3>Add License</h3>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                        <div class="row mt-2">                            
+                            <div class="col-md-4">
+                                <label for="" class="lh-35">
+                                    Username
+                                </label>                               
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control required" name="username" 
+                                {% if ticket %}
+                                    value="{{ ticket.username }}"
+                                {% endif %}
+                                 />
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">                            
+                            <div class="col-md-4">
+                                <label for="" class="lh-35">
+                                    License
+                                </label>                               
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control required" name="license" 
+                                {% if ticket %}
+                                    value="{{ ticket.license_key }}"
+                                {% endif %}
+                                />
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">                            
+                            <div class="col-md-4">
+                                <label for="" class="lh-35">
+                                    Expire
+                                </label>                               
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control required" name="expire" 
+                                {% if ticket %}
+                                    value="{{ ticket.expire }}"
+                                {% endif %}
+                                />
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">                            
+                            <div class="col-md-4">
+                                <label for="" class="lh-35">
+                                    Connections
+                                </label>                               
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control required" name="connections" 
+                                {% if ticket %}
+                                    value="{{ ticket.connections }}"
+                                {% endif %}
+                                />
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">                            
+                            <div class="col-md-4">
+                                <label for="" class="lh-35">
+                                    Bookie
+                                </label>                               
+                            </div>
+                            <div class="col-md-8">
+                                <select type="text" class="form-control required" name="bookie">
+                                    <option value="BET365">BET365</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>   
+                    
+                    
+                    <div class="row mt-5">
+                        <div class="col-md-12 text-center">
+                            <button type="button" class="btn btn_blue btn_create_ticket">
+                                {% if ticket %}
+                                    <h3>Update</h3>
+                                {% else %}
+                                    <h3>Submit</h3>
+                                {% endif %}                                
+                            </button>
+                        </div>         
+                    </div>
+                </div>
+                {% if ticket %}
+                    <input type="hidden" name="which" class="which" value="{{ ticket.id }}">                
+                {% else %}
+                    <input type="hidden" name="which" class="which" value="0">
+                {% endif %}                
+            </form>            
+        </div>
+    </div>     
+
+    {% if ticket %}       
+        <input type="hidden" class="insurer" value="{{ ticket.insurer }}">
+        <input type="hidden" class="ticket_type" value="{{ ticket.ticket_type }}">
+        <input type="hidden" class="ticket_status" value="{{ ticket.ticket_status }}">
+        <input type="hidden" class="vehicle_manufacturer" value="{{ ticket.vehicle_manufacturer }}">    
+        <input type="hidden" class="tow_to_workshop" value="{{ ticket.tow_to_workshop }}">    
+    {% endif %}
+    <script>
+        $(document).ready(function(){
+            var which = parseInt($(".which").val());
+            if(which > 0)
+            {
+                var insurer = $(".insurer").val();
+                var ticket_type = $(".ticket_type").val();
+                var ticket_status = $(".ticket_status").val();
+                var vehicle_manufacturer = $(".vehicle_manufacturer").val();
+                var tow_to_workshop = $(".tow_to_workshop").val();
+               
+                $('select[name="insurer"] option[value="'+insurer+'"]').attr('selected','selected');
+                $('select[name="ticket_type"] option[value="'+ticket_type+'"]').attr('selected','selected');
+                $('select[name="ticket_status"] option[value="'+ticket_status+'"]').attr('selected','selected');
+                $('select[name="vehicle_manufacturer"] option[value="'+vehicle_manufacturer+'"]').attr('selected','selected');
+                $('select[name="tow_to_workshop"] option[value="'+tow_to_workshop+'"]').attr('selected','selected');
+            }
+        });
+    </script>
+{% endblock %}

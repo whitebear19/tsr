@@ -1,0 +1,13 @@
+.idea/
+.vscode/
+
+__pycache__/
+
+content/media/
+content/static/
+sent_emails
+env/
+3env/
+tmp/
+
+db.sqlite3

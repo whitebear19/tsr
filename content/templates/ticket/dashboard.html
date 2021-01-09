@@ -1,0 +1,91 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="main-section">
+        <div class="container-fluid">
+            <div class="main-section-data">
+                <div class="row">
+                    <div class="header_ticket">                    
+                        <a class="btn btn_ticket" href="{% url 'ticket:create' %}">Add Ticket</a>                    
+                    </div>
+                </div>
+                <div class="body_ticket">     
+                    <div class="row">
+                        <div class="col-md-12">                            
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td class="text-center">No</td>
+                                        <td class="text-center">Username</td>
+                                        <td class="text-center">Bookie</td>
+                                        <td class="text-center">License</td>
+                                        <td class="text-center">Count</td>
+                                        <td class="text-center">Created</td>
+                                        <td class="text-center">Expires</td>
+                                        <td class="text-center">Active</td>
+                                        <td class="text-center">Actions</td>                                            
+                                    </tr>                                       
+                                </thead>
+                                <tbody class="ticket_list">
+                                    
+                                </tbody>                                
+                            </table>                            
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div id="area-pagination" style="text-align: center;margin-top:20px;">
+                    <div style="text-align: left;">
+                        <strong>Total Page:<span class="total-page"></span></strong>
+                    </div>
+                    <div id="bottom-pagination" class="ProjectSearch-footer-pagination">
+                        <form action="" id="pagination-form" method="get">
+                            
+                            <ul id="pagination-150" class="Pagination">
+                                <li data-link="1" class="Pagination-item">
+                                    <button type="button" class="btn-start btn Pagination-link">
+                                    <span>
+                                        <i class="fas fa-step-backward"></i>
+                                    </span>
+                                    </button>
+                                </li>
+                                <li data-link="prev_page" class="Pagination-item">
+                                    <button type="button" class="btn-prev btn paginate_button Pagination-link">
+                                    <span>
+                                        <i class="fas fa-caret-left"></i>
+                                    </span>
+                                    </button>
+                                </li>
+                                
+                                
+                                <li class="Pagination-item">
+                                    <button type="button" class="btn-current-page btn-first btn number Pagination-link is-active"></button> 
+                                </li>
+                                
+                                <li data-link="next_page" class="Pagination-item">
+                                    <button type="button" class="btn-next btn Pagination-link">
+                                    <span>
+                                        <i class="fas fa-caret-right"></i>
+                                    </span>
+                                    </button>
+                                </li>
+                                <li data-link="last_page" class="Pagination-item">
+                                    <button type="button" class="btn-end btn Pagination-link">
+                                    <span>
+                                        <i class="fas fa-step-forward"></i>
+                                    </span>
+                                    </button>
+                                </li>
+                            </ul>
+                            <input type="hidden" name="currentPage" id="currentPage">
+                            <input type="hidden" name="searchWord" id="searchWord">
+                        </form>
+                    </div>
+                </div>
+            </div><!-- main-section-data end-->
+        </div>        
+    </div>     
+    
+{% endblock %}

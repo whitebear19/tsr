@@ -1,0 +1,215 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="main-section">
+        <div class="sel_nav">
+            <ul>
+                <li class="sel_nav_item selected_nav_item" data-item="clustering">
+                    <span>CLUSTERING INPUTS</span>
+                </li>
+                <li class="sel_nav_item" data-item="plots">
+                    <span>PLOTS</span>
+                </li>
+            </ul>
+        </div>
+        <div class="part_clustering sel_nav_part">
+            <label for="" class="main_title">Clustering</label>
+            <p class="text-grey">
+                This generates the clustering results for the selected sample or dataset. Make sure the keys files are already generated for this sample. If not, please use the previous step of Keys Generation.
+            </p>
+            <div class="row">
+                <div class="col-md-6 mt-3">
+                    <div class="form-group">
+                        <label for="">Directory path where all the datasets are present:</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Value" aria-label="Value" aria-describedby="btn_sample_upload">
+                            <div class="input-group-append">
+                            <button class="btn btn_right_side_radius" type="button" id="btn_sample_upload">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <div class="form-group">
+                        <label for="">Dataset or the sample folder name:</label>
+                        <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Value">               
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mt-5">
+                        <label for="" class="mr-3">Doing Feature Selection?</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="">Add header to distance file?</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>  
+                </div>               
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <span class="mr-3 mt-3">
+                            <label for="" class="W-110">Num of Gap:</label>
+                            <input type="text" class="common_select" placeholder="Value">
+                        </span>                       
+                    </div>                   
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">                       
+                        <span class="mr-3 mt-3">
+                            <label for="" class="W-110">MAD:</label>
+                            <input type="text" class="common_select" placeholder="Value">
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <span class="mr-3 mt-3">
+                            <label for="" class="W-110">Key Combine:</label>
+                            <select name="" id="" class="common_select">
+                                <option value=""></option>
+                            </select>
+                        </span>                        
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">                       
+                        <span class="mr-3 mt-3">
+                            <label for="" class="W-110">Distance Type:</label>
+                            <input type="text" class="common_select" placeholder="Value">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+           
+            <div class="form-group text-center mt-5">
+                <button class="btn_cluster btn_blue">Cluster</button>
+                <p class="text-blue text-bold">
+                    Check for the clustering plots in the Plots tab
+                </p>
+            </div>    
+            
+            <div class="data_results mt-5">
+                <table id="results_clustering" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Adjusted Rand Index(ARI)</th>
+                            <th>Homogeneity</th>
+                            <th>Completeness</th>
+                            <th>Clustering Type</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.19</td>
+                            <td>0.81</td>
+                            <td>0.61</td>
+                            <td><span class="status_average">average</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.19</td>
+                            <td>0.81</td>
+                            <td>0.61</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.193</td>
+                            <td>0.813</td>
+                            <td>0.613</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.193</td>
+                            <td>0.813</td>
+                            <td>0.613</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.193</td>
+                            <td>0.813</td>
+                            <td>0.613</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.193</td>
+                            <td>0.813</td>
+                            <td>0.613</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.193</td>
+                            <td>0.813</td>
+                            <td>0.613</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.193</td>
+                            <td>0.813</td>
+                            <td>0.613</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.193</td>
+                            <td>0.813</td>
+                            <td>0.613</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.193</td>
+                            <td>0.813</td>
+                            <td>0.613</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                        <tr>
+                            <td>TSR 3D</td>
+                            <td>0.193</td>
+                            <td>0.813</td>
+                            <td>0.613</td>
+                            <td><span class="status_ward">ward</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+         
+        <div class="part_plots sel_nav_part">
+            <label for="" class="main_title">Clustering Plots</label>
+            <p class="text-grey">
+                This generates the clustering plots for the selected sample or dataset. You can select from the various plot types that are available. The below displayed plots can also be found in the dataset folder as images.
+            </p>
+            <div class="form-group">
+                <span class="mr-3 mt-3">
+                    <label for="" class="W-110">Plot:</label>
+                    <select name="" id="" class="common_select">
+                        <option value=""></option>
+                    </select>
+                </span>                        
+            </div>  
+        </div>
+    </div>     
+{% endblock %}

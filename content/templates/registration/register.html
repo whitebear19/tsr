@@ -1,0 +1,135 @@
+
+
+{% extends 'authroot.html' %}
+{% load static %}
+{% block content %}
+    <div class="register-sidebar bg-dark d-flex flex-column justify-content-between">
+        <h2 class="font-weight-bold mb-4 text-center">
+            <span>
+                <svg aria-hidden="true" style="width: 60px;height:60px;color:#2980ef" focusable="false" data-prefix="fal" data-icon="user-plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="svg-inline--fa fa-user-plus fa-w-20 fa-3x"><path fill="currentColor" d="M632 224h-88v-88c0-4.4-3.6-8-8-8h-16c-4.4 0-8 3.6-8 8v88h-88c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8h88v88c0 4.4 3.6 8 8 8h16c4.4 0 8-3.6 8-8v-88h88c4.4 0 8-3.6 8-8v-16c0-4.4-3.6-8-8-8zm-318.4 64c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4zM416 464c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16v-41.6C32 365.9 77.9 320 134.4 320c19.6 0 39.1 16 89.6 16 50.4 0 70-16 89.6-16 56.5 0 102.4 45.9 102.4 102.4V464zM224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm0-224c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z" class=""></path></svg>
+            </span>
+        </h2>
+        <form action="" id="form_register" method="POST">
+        {% csrf_token %} 
+           
+            <div class="form-group">
+                <label for="">User name</label>
+                <input type="text" class="form-control required form_custom_field" name="username" placeholder="welcome">
+            </div>                
+                     
+            
+            <div class="form-group">
+                <p class="alert_username alert_txt">Username already registered. Please login</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="">Password <small>(8 or more
+                        characters)</small></label>
+                <input type="password" class="form-control required form_custom_field" name="password1" placeholder="Choose your password"
+                    aria-describedby="passwordHelpBlock">
+            </div>
+            <div class="form-group">
+                <label for="">Confirm password</label>
+                <input type="password" class="form-control required form_custom_field"  name="password2"  placeholder="Re-enter password"
+                    aria-describedby="passwordHelpBlock">
+            </div>
+           
+           
+            <button type="button" class="btn btn-primary btn-block font-weight-bold btn_register"> Sign Up
+            </button> 
+        </form>
+        <div class="text-center text-md-left mt-3">
+            <span>Already on have an account? <a href="{% url 'login' %}">Sign in</a></span>
+        </div>
+    </div>   
+    <script>
+        
+       
+        $(document).ready(function(){                
+           
+            $(document).on('click','.btn_register',function()
+            {      
+               
+                var checkvalid = true;       
+                $(".required").each(function(){
+                    if($(this).val() == "")
+                    {                        
+                        $(this).addClass('alertborder');
+                        checkvalid = false;
+                    }
+                });                
+               
+                var password1 = $('input[name="password1"]').val();
+                var password2 = $('input[name="password2"]').val();       
+               
+                if(password1 != password2)
+                {                    
+                    $(".alert_passmatch").css('display','block');
+                    return false;
+                }
+                else
+                {
+                    if(password1.length < 8)
+                    {
+                        alert("The password must be 8 or more characters.");
+                        return false;
+                    }
+                    else
+                    {
+                        if(password1.match(/^[0-9]+$/))
+                        {
+                            alert("The password must be characters and numbers");  
+                            return false;   
+                        }
+                    }
+                }
+               
+                
+                if(checkvalid)
+                {                 
+                    
+                    var data = $('#form_register').serialize();
+                    $("#loading").css("display","flex");
+                    $.ajax({
+                        url: "{% url 'account:check_register' %}",
+                        method: 'POST', 
+                        type: 'json',
+                        data: data,           
+                        success: function (response) {                            
+                            $("#loading").css("display","none");
+                            var data = response.results;
+                            if(data.is_check == '1')
+                            {                                
+                                $(".alert_username").css('display','block');                                
+                            }
+                            else
+                            {
+                                swal({
+                                    title: "Successfully registered!",  
+                                    text: "Please login.",                                               
+                                    type: "success"
+                                }).then(function() {
+                                    var cur_url = window.location.href.replace('register', 'login');                       
+                                    window.location.replace(cur_url);
+                                });
+                                
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    return false;
+                }
+            });
+            $(document).on('keyup','.alertborder',function(){
+                $(this).removeClass('alertborder');
+            });
+            $(document).on('keyup','.required',function(){
+                $(this).parent().parent().find('p').css('display','none');
+            });
+            
+            
+        });
+    </script>
+{% endblock %}

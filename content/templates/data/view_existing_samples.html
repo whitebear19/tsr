@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="main-section">
+        <label for="" class="main_title">Existing Samples</label>
+        <p class="text-grey">
+            Lists all the existing prepared/unprepared samples and shows the status of the sample with resect to the files generated at each step.
+        </p>
+         
+        <div class="data_results">
+            <table id="results_view" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Sample</th>
+                        <th>sample_details file exists?</th>
+                        <th>Keys generated?</th>
+                        <th>Vector file exists?</th>
+                        <th>Distance file exists?</th>                            
+                        <th>Clustering done?</th>                            
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>sample_SCOP_95</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>                        
+                    </tr>
+                    <tr>
+                        <td>sample_kinase_phosphatase</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>No</td>                        
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+    </div>     
+{% endblock %}

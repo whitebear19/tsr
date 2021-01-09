@@ -1,0 +1,62 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="main-section">
+         <label for="" class="main_title">Keys Generation</label>
+         <p class="text-grey">
+            This generates the TSR 3D keys files for the selected sample or dataset. Make sure the PDB files are already downloaded in the specified sample folder. If not, please use the previous step of Sample Generation to download the PDB files.
+         </p>
+         
+         <div class="form-group">
+             <label for="">Select the directory path where all the datasets are present:</label>
+            <div class="input-group mb-3 W-450">
+                <input type="text" class="form-control" placeholder="Value" aria-label="Value" aria-describedby="btn_sample_upload">
+                <div class="input-group-append">
+                  <button class="btn btn_right_side_radius" type="button" id="btn_sample_upload">Upload</button>
+                </div>
+              </div>
+         </div>
+        <div class="form-group">
+            <label for="">Enter the dataset or the sample folder name:</label>
+            <div class="input-group mb-3 W-450">
+               <input type="text" class="form-control" placeholder="Value">               
+            </div>
+        </div>
+        <div class="form-group mt-2">
+            <span class="mr-3 mt-3">
+                <label for="">Theta Bins:</label>
+                <select name="" id="" class="common_select">
+                    <option value=""></option>
+                </select>
+            </span>
+            <span class="mr-3 mt-3">
+                <label for="">Length Bins:</label>
+                <select name="" id="" class="common_select">
+                    <option value=""></option>
+                </select>
+            </span>
+            <span class="mr-3 mt-3">
+                <label for="">Size Gap Value:</label>
+                <input type="text" class="common_select" placeholder="Value">
+            </span>
+        </div>
+        <div class="form-group mt-5">
+            <label for="" class="mr-3">Dose sample_details.csv has chain informations?</label>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="form-group mt-3">
+            <label for="">Generate Triplets file?</label>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>  
+        <div class="form-group text-center mt-5">
+            <button class="btn_generate_keys btn_blue">Generate Keys</button>
+        </div>      
+    </div>     
+{% endblock %}
