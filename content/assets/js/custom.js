@@ -11,9 +11,9 @@ jQuery(function ($) {
 
         var currentPage = 1;
         var pagenum = 1;     
-
-        
-       $(document).on('click','.btn_create_ticket',function()
+        var filename = '';
+        var token = $('input[name="csrfmiddlewaretoken"]').val();
+        $(document).on('click','.btn_create_ticket',function()
        {            
             var checkvalid = true;       
             $(".required").each(function(){
@@ -76,6 +76,122 @@ jQuery(function ($) {
             $(".part_"+item).css("display","block");
         });
         
+        $(document).on('click','.btn_generate_samples',function(){
+            if(filename == '')
+            {
+                swal({
+                    title: "You did not upload file.",                            
+                    text: "Please upload csv file",
+                    type: "error"
+                }).then(function() {
+                   
+                });
+            }
+            else
+            {                
+                $("#loading").css("display","block");
+                var formdata = new FormData;
+                formdata.append('filename',filename);
+                $.ajax({
+                    headers: { "X-CSRFToken": token },
+                    url:"/process_csv",
+                    type: 'post',
+                    dataType: 'json',
+                    data: formdata,
+    
+                    processData: false,
+                    contentType: false,
+                    success: function(response){                  
+                        $("#loading").css("display","none");
+                        $(".selected_file_name").val("");
+                        $('#btn_sample_upload').val("");
+                        filename = '';
+                        if(response.results)
+                        {                        
+                            swal({
+                                title: "Process success!",                            
+                                type: "success"
+                            }).then(function() {
+                               
+                            });
+                        }  
+                        else
+                        {
+                            swal({
+                                title: "Something wrong!",                            
+                                text: "Please try again.",
+                                type: "error"
+                            }).then(function() {
+                               
+                            });
+                        }
+                        var data = response.data;                     
+                        if(data.length>0)
+                        {
+                            for (let index = 0; index < data.length; index++) {                           
+                                var html = '';
+                                html = `
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong><i class="fas fa-check"></i></strong> 
+                                        ${data[index]}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                `;
+                                $(".show_results").append(html);
+                            }
+                            
+                        }
+    
+                    }
+                });
+            }
+        });
+
+        $('#btn_sample_upload').change(function () {
+            filename = this.files[0].name;
+            $(".selected_file_name").val(filename);    
+            var formdata = new FormData;
+            formdata.append('attach',this.files[0]);
+            
+            $("#loading").css("display","block");
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"/upload_csv",
+                type: 'post',
+                dataType: 'json',
+                data: formdata,
+
+                processData: false,
+                contentType: false,
+                success: function(response){                  
+                    $("#loading").css("display","none");                    
+                    $('#btn_sample_upload').val("")
+                    if(response.results)
+                    {                        
+                        swal({
+                            title: "Upload success!",                            
+                            type: "success"
+                        }).then(function() {
+                           
+                        });
+                    }  
+                    else
+                    {
+                        swal({
+                            title: "Something wrong!",                            
+                            text: "Please try again.",
+                            type: "error"
+                        }).then(function() {
+                           
+                        });
+                    }
+                    var data = response.data; 
+                    filename = data;   
+                }
+            });
+        });
 
         $(document).ready(function(){            
             $(".btn-current-page").html(currentPage);

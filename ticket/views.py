@@ -28,18 +28,15 @@ from PIL import Image
 from django.core.mail import send_mail,EmailMessage
 from django.template.loader import render_to_string, get_template
 from django.utils.html import strip_tags
-from ticket.models import Tickets
+from ticket.models import Uploadedcsv,Uploadedpdb
+from Main import settings
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver import ActionChains                   # For click Enter from keyboard
+from selenium.webdriver import ActionChains                  
 
-
-PAGINATION_COUNT = 10
-
-# bet part
-
-
+import urllib.request
+import pandas as pd
 
 
 def is_check_username(username,id):
@@ -99,135 +96,107 @@ def edit(request,id):
         return redirect('/dashboard')
 
 # ajax
-def store(request):
+def start(filename): 
+    files = Uploadedpdb.objects.all()
+    if files:        
+        files.delete()
 
-    
-    if not request.user.is_authenticated:
-        results = False
-        return JsonResponse({'results':results}) 
-    else:        
-        user = request.user         
-        username = request.POST.get('username')
-        license_key = request.POST.get('license')
-        expire = request.POST.get('expire')
-        connections = request.POST.get('connections')
-        bookie = request.POST.get('bookie')    
-        id = request.POST.get('which')
-
-        is_valid = is_check_username(username,id)
-        
-        if is_valid:            
-            if id == "0":
-                row = Tickets(username=username,license_key=license_key,expire=expire,connections=connections,bookie=bookie)
-                row.save() 
-            else:
-                row = Tickets.objects.get(id=id)
-                row.username = username
-                row.license_key = license_key
-                row.expire = expire
-                row.connections = connections
-                row.bookie = bookie      
-                row.save()
-            results = True
-            return JsonResponse({'results':results})    
-        else:            
-            return JsonResponse({'results':False,'is_username':False})  
-    
-
-def get_tickets(request):
-    tickets = ''
-    results = []
-    pagenum = 0
-
-    try:
-               
-        user = request.user
-        currentPage = request.GET.get('currentPage')   
-        tickets = Tickets.objects.all() 
-       
-        tickets = tickets.order_by('-created_at')
-        pagenum = math.ceil(tickets.count()/PAGINATION_COUNT)
-        paginator = Paginator(tickets,PAGINATION_COUNT)   
-        resultscollection = paginator.get_page(currentPage) 
-    
-        for item in resultscollection:
-            data = {}
-            data['id'] = item.id       
-            data['username'] = item.username
-            data['license_key'] = item.license_key
-            data['expire'] = item.expire
-            data['connections'] = item.connections
-            data['bookie'] = item.bookie
-            data['status'] = item.status
-            data['created_at'] = (item.created_at).strftime('%Y-%m-%d %H:%M:%S')            
-            results.append(data)
-            
-        return JsonResponse({'results':results,'pagenum':pagenum})
-    except:
-        return JsonResponse({'results':results,'pagenum':pagenum})
-
-def delete(request):
-    try:
-        id = request.GET.get('id')
-        row = Tickets.objects.get(id=id)
-        row.delete()
-        return JsonResponse({'results':True})
-    except:
-        return JsonResponse({'results':False})
-
-
-def ischecklicense(request):
-    try:        
-        username = request.GET.get('username')
-        license_key = request.GET.get('license')        
-        if Tickets.objects.filter(username=username).count():
-            thisrow = Tickets.objects.get(username=username)
-            if thisrow.license_key == license_key:
-                return JsonResponse({'results':True,'username':True, 'license':True})
-            else:
-                return JsonResponse({'results':False,'username':True, 'license':False})
-        else:
-            return JsonResponse({'results':False,'username':False, 'license':False})   
-        
-    except:
-        return JsonResponse({'results':False})
-
-
-def get_stake(request):
-    targetvalue = ''
-    odds = ''
-    stake = ''
+    non_functional_urls = []
     data = []
-    try:        
-        stake = request.GET.get('stake')
-        print(stake)
-               
-        try:
-            try:                
-                reconnect = driver.find_elements_by_class_name('badge.badge-danger.m-2.p-2.clickable')[0]
-                reconnect.click()
-                time.sleep(3)
-            except:
-                pass
-            valuebettingitem = driver.find_elements_by_class_name('odds-card.card-shadow.card-shadow-hover.d-flex.clickable.no-outline')
-            for item in valuebettingitem:
-                result={}
-                item.click()
-                time.sleep(5)
-                targetvalue = driver.find_element_by_id('participants').text
-                targetvalue = targetvalue.replace(" vs "," v ")         
-                odds = driver.find_element_by_id('Odds').get_attribute('value')
-                stake = driver.find_element_by_id('Stake').get_attribute('value')
-                result['targetvalue'] = targetvalue
-                result['odds'] = odds
-                result['stake'] = stake
-                data.append(result) 
-                time.sleep(1)            
-                driver.find_element_by_id('CloseSelectedCard').click()
+    start = time.time()
+    media_root = settings.MEDIA_ROOT
+    pdb_root = os.path.join(media_root, 'pdb')
+    media_root = os.path.join(media_root, 'csv')
+    
+    
+    #arr = ['1h7w', '1jmx', '1rq6', '2j9u', '1d9c', '2ciw']
+    samples_file = pd.read_csv(os.path.join(media_root, filename))
 
-        except:
-            print('no item')
+    sample = samples_file['protein'].map(str).values
+
+    for id in sample: 
+        #Generate the downloadable URL
+        url = "http://files.rcsb.org/download/{}.pdb".format(id.replace(
+                '+', ''))
+        #Check if the URL exists, otherwise skip that PDB ID
+        request = requests.get(url)
+        if request.status_code == 200:
+            outputFilename = "{}/{}.pdb".format(pdb_root,str(id.replace('+', '')))
+            response = urllib.request.urlopen(url)
+            zippedData = response.read()
+            # save data to disk
+            output = open(outputFilename,'wb')
+            
+            output.write(zippedData)
+            output.close()
+            
+            temp = url + " extracted to " + outputFilename
+            print(temp)
+            thisfilename = str(id.replace('+', '')) + ".pdb"
+            row = Uploadedpdb(user_id='1',filename=thisfilename)
+            row.save()
+            print(thisfilename)
+            data.append(temp)
+            
+        else:
+            non_functional_urls.append(id)
+            continue
+    if non_functional_urls:
+        msg = "Un available URLs- {}".format(non_functional_urls)
+        data.append(msg)
+        print(msg)
+    msg = 'Downloaded {}/{} PDB files and saved at {}'.format(
+            len(sample) - len(non_functional_urls), len(sample), 
+            os.path.join(pdb_root))
+    data.append(msg)
+    
+    msg = 'Time taken for generating sample is {} mins.'.format(
+            round((time.time()-start)/60, 2))
+    data.append(msg)
+
+    
+    return data
+       
+def upload_csv(request):
+    data = ''
+    try:    
+        files = Uploadedcsv.objects.all()
+        if files:
+            for item in files:
+                try:
+                    print(item.filename)
+                    print(settings.MEDIA_ROOT)            
+                    media_root = settings.MEDIA_ROOT
+                    media_root = os.path.join(media_root, 'csv')
+                    filename = item.filename
+                    os.remove(os.path.join(media_root, filename))
+                except:
+                    pass
+            files.delete()
         
+        filename = request.FILES.get('attach').name
+        row = Uploadedcsv(user_id='1',file=request.FILES.get('attach'),filename=filename)
+        row.save()
+        filename = str(row.file) 
+        filename = filename.replace('csv/','')   
+        row.filename = filename               
+        row.save() 
+        data = filename
         return JsonResponse({'results':True,'data':data})
     except:
-        return JsonResponse({'results':False,'data':data})
+        return JsonResponse({'results':False,'data':data}) 
+
+def process_csv(request):
+
+    data = []
+    try:    
+                
+        filename = request.POST.get('filename')
+        print(filename)
+        if filename:        
+            data = start(filename)
+
+        
+        return JsonResponse({'results':True,'data':data})    
+    except:
+        return JsonResponse({'results':False,'data':data}) 

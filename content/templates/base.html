@@ -25,7 +25,7 @@
 
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg static-top">
-		<div class="container">
+		<div class="container-fluid">
 		  <a class="navbar-brand" href="/">TSR LOGO</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -43,58 +43,58 @@
 		  </div>
 		</div>
 	</nav>
+	<div class="left_menu">
+		<div class="left_side">
+			<ul class="menu">
+				<li class="{% if nav == 'sample' %} selected_menu_item {% endif %}">
+					<a href="{% url 'ticket:dashboard' %}">
+						<i class="fas fa-bookmark mr-2"></i>
+						<span>Sample Generation</span> 
+					</a>								
+				</li>
+				<li class="{% if nav == 'calculate' %} selected_menu_item {% endif %}">
+					<a href="{% url 'ticket:calculate' %}">
+						<i class="fas fa-bookmark mr-2"></i>
+						<span>Calculate TSR 3D Keys</span> 
+					</a>
+				</li>
+				<li class="{% if nav == 'clustering' %} selected_menu_item {% endif %}">
+					<a href="{% url 'ticket:clustering' %}">
+						<i class="fas fa-bookmark mr-2"></i>
+						<span>Clustering</span> 
+					</a>								
+				</li>
+				<li class="{% if nav == 'identify' %} selected_menu_item {% endif %}">
+					<a href="{% url 'ticket:identify' %}">
+						<i class="fas fa-bookmark mr-2"></i>
+						<span>Identify Common Keys</span> 
+					</a>								
+				</li>
+			</ul>
+			<hr>
+			<ul class="menu">
+				<li class="{% if nav == 'view' %} selected_menu_item {% endif %}">
+					<a href="{% url 'ticket:view_existing_samples' %}">
+						<i class="fas fa-bookmark mr-2"></i>
+						<span>View Existing Samples</span> 
+					</a>								
+				</li>							
+			</ul>
+		</div>
+	</div>
 	<main>
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3">
-					<div class="left_side">
-						<ul class="menu">
-							<li class="{% if nav == 'sample' %} selected_menu_item {% endif %}">
-								<a href="{% url 'ticket:dashboard' %}">
-									<i class="fas fa-bookmark mr-2"></i>
-									<span>Sample Generation</span> 
-								</a>								
-							</li>
-							<li class="{% if nav == 'calculate' %} selected_menu_item {% endif %}">
-								<a href="{% url 'ticket:calculate' %}">
-									<i class="fas fa-bookmark mr-2"></i>
-									<span>Calculate TSR 3D Keys</span> 
-								</a>
-							</li>
-							<li class="{% if nav == 'clustering' %} selected_menu_item {% endif %}">
-								<a href="{% url 'ticket:clustering' %}">
-									<i class="fas fa-bookmark mr-2"></i>
-									<span>Clustering</span> 
-								</a>								
-							</li>
-							<li class="{% if nav == 'identify' %} selected_menu_item {% endif %}">
-								<a href="{% url 'ticket:identify' %}">
-									<i class="fas fa-bookmark mr-2"></i>
-									<span>Identify Common Keys</span> 
-								</a>								
-							</li>
-						</ul>
-						<hr>
-						<ul class="menu">
-							<li class="{% if nav == 'view' %} selected_menu_item {% endif %}">
-								<a href="{% url 'ticket:view_existing_samples' %}">
-									<i class="fas fa-bookmark mr-2"></i>
-									<span>View Existing Samples</span> 
-								</a>								
-							</li>							
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-9">
+		<div class="container-fluid">
+			<div class="row">				
+				<div class="col-lg-12">
 					{% block content %}
 					
 					{% endblock %}
 				</div>
 			</div>
-		</div>
+		</div>		
 	</main>
 	<footer>
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12 text-center">
 					<ul class="footer_link">
@@ -128,16 +128,14 @@
 			</div>
 		</div>
 	</footer>
+	<div id="loading">
+		<div class="lds-ring" ><div></div><div></div><div></div><div></div></div>
+	</div>
 	
-	<div class="process-comm" id="loading">
-		<div class="spinner">
-		   <div class="bounce1"></div>
-		   <div class="bounce2"></div>
-		   <div class="bounce3"></div>
-		</div>
-	 </div>
 	<!--theme-layout end-->
-
+	 <form action="" method="post">
+		{% csrf_token %}
+	 </form>
 	
 	<script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>	

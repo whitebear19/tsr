@@ -7,14 +7,19 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-class Tickets(models.Model):
+class Uploadedcsv(models.Model):
     id=models.AutoField(primary_key=True)
-    username = models.CharField(default='',max_length=255, null=True, unique=True)    
-    license_key = models.CharField(default='',max_length=255, null=True)
-    expire = models.CharField(default='',max_length=255, null=True)
-    connections = models.CharField(default='',max_length=255, null=True,)
-    bookie = models.CharField(default='',max_length=255, null=True)    
-    status = models.CharField(default='',max_length=255, null=True)    
+    user_id = models.CharField(default='',max_length=255, null=True)    
+    filename = models.CharField(default='',max_length=255, null=True)
+    file = models.FileField(upload_to='csv',default='', null=True) 
     created_at = models.DateTimeField(auto_now_add=True,blank=True) 
     class Meta:
-        db_table = 'tickets'
+        db_table = 'uploadedcsv'
+
+class Uploadedpdb(models.Model):
+    id=models.AutoField(primary_key=True)
+    user_id = models.CharField(default='',max_length=255, null=True)    
+    filename = models.CharField(default='',max_length=255, null=True)    
+    created_at = models.DateTimeField(auto_now_add=True,blank=True) 
+    class Meta:
+        db_table = 'uploadedpdb'

@@ -12,10 +12,7 @@ urlpatterns = [
     path('view_existing_samples',view=views.view_existing_samples, name='view_existing_samples'),
     path('edit/<str:id>',view=views.edit, name='edit'),
     # ajax
-    path('store',view=views.store, name='store'),
-    path('get_tickets',view=views.get_tickets, name='get_tickets'),
-    path('delete',view=views.delete, name='delete'),   
-    path('ischecklicense',view=views.ischecklicense, name='ischecklicense'),   
-    path('get_stake',view=views.get_stake, name='get_stake'),
+    path('upload_csv',view=views.upload_csv, name='upload_csv'),   
+    path('process_csv',view=views.process_csv, name='process_csv'), 
    
 ]
